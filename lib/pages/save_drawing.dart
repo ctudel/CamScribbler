@@ -37,11 +37,15 @@ class SaveDrawing extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   FilledButton(
-                    onPressed: null,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    onPressed: () =>
+                        Navigator.of(context).pushReplacementNamed('/'),
                     child: Text(
                       'Discard',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
+                          color: Theme.of(context).colorScheme.surface),
                     ),
                   ),
                   FilledButton(

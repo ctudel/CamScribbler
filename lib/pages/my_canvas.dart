@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import '../widgets/widgets.dart';
+import '../providers/providers.dart';
 
 class MyCanvas extends StatefulWidget {
   const MyCanvas({super.key, required this.title});
@@ -76,8 +77,8 @@ class _MyCanvasState extends State<MyCanvas> {
             );
           }
 
-          return ChangeNotifierProvider<_CanvasSettingProvider>(
-            create: (BuildContext _) => _CanvasSettingProvider(),
+          return ChangeNotifierProvider<CanvasSettingProvider>(
+            create: (BuildContext _) => CanvasSettingProvider(),
             child: Scaffold(
               appBar: AppBar(
                 backgroundColor: Theme.of(context).colorScheme.surface,
@@ -187,8 +188,8 @@ class Palette extends StatefulWidget {
 class _PaletteState extends State<Palette> {
   @override
   Widget build(BuildContext context) {
-    _CanvasSettingProvider provider =
-        Provider.of<_CanvasSettingProvider>(context);
+    CanvasSettingProvider provider =
+        Provider.of<CanvasSettingProvider>(context);
 
     return Positioned(
       top: 10,
@@ -337,8 +338,8 @@ class StrokePicker extends StatefulWidget {
 class _StrokePickerState extends State<StrokePicker> {
   @override
   Widget build(BuildContext context) {
-    _CanvasSettingProvider provider =
-        Provider.of<_CanvasSettingProvider>(context);
+    CanvasSettingProvider provider =
+        Provider.of<CanvasSettingProvider>(context);
 
     return Positioned(
       top: 10,
@@ -388,31 +389,5 @@ class _StrokePickerState extends State<StrokePicker> {
         ],
       ),
     );
-  }
-}
-
-class _CanvasSettingProvider with ChangeNotifier {
-  bool _showSlider = false;
-  bool _showPalette = false;
-
-  bool get showSlider => _showSlider;
-  bool get showPalette => _showPalette;
-
-  void toggleSlider() {
-    if (_showPalette) _showPalette = !_showPalette;
-    _showSlider = !_showSlider;
-    notifyListeners();
-  }
-
-  void togglePalette() {
-    if (_showSlider) _showSlider = !_showSlider;
-    _showPalette = !_showPalette;
-    notifyListeners();
-  }
-
-  void closeSettings() {
-    _showSlider = false;
-    _showPalette = false;
-    notifyListeners();
   }
 }

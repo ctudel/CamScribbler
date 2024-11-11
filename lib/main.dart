@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       light: ThemeData.light(useMaterial3: true),
       dark: ThemeData.dark(useMaterial3: true),
       initial: AdaptiveThemeMode.light,
-      builder: (theme, darkTheme) => MaterialApp(
+      builder: (ThemeData theme, ThemeData darkTheme) => MaterialApp(
         title: 'My App',
         theme: theme,
         darkTheme: darkTheme,
