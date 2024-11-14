@@ -44,6 +44,9 @@ class MainScaffold extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
         body: child,
         bottomNavigationBar: MyNavBar(pageIndex: pageIndex),
       ),

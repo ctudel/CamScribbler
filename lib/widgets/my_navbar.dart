@@ -29,7 +29,7 @@ class MyNavBar extends StatelessWidget {
       ],
       onTap: (idx) {
         // TODO: Add pages as they are implemented
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).pushReplacementNamed(
           switch (idx) {
             0 => '/',
             1 => '/drawings',

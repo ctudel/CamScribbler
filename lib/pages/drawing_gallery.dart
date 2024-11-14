@@ -28,26 +28,27 @@ class DrawingGallery extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(15),
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    myImages[index]["image"],
+                    const Text(
+                      'My Drawing',
+                      style: style,
+                    ),
+                    const Text(
+                      'Nov 11, 2024',
+                      style: style,
+                    ),
+                  ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      myImages[index]["image"],
-                      const Text(
-                        'My Drawing',
-                        style: style,
-                      ),
-                      const Text(
-                        'Nov 11, 2024',
-                        style: style,
-                      ),
-                    ],
-                  ),
-                )),
+              ),
+            ),
           ),
         );
       },
