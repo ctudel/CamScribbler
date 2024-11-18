@@ -41,6 +41,7 @@ dependencies:
   simple_animations: ^5.1.0
   adaptive_theme: ^3.6.0
   sqflite: ^2.4.1
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

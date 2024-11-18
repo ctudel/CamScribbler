@@ -1,11 +1,36 @@
+import 'dart:io';
+
 import 'package:cam_scribbler/widgets/my_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'pages.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({
     super.key,
   });
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  File image = File('');
+
+  /// Take a photo or pick photo one from the gallery
+  Future<File?> pickImage(ImageSource source) async {
+    try {
+      // Take photo or pick from gallery
+      final XFile? image =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+
+      if (image == null) return null; // no image picked or taken
+
+      return (this.image = File(image.path));
+    } catch (e) {
+      print('Failed to pick image $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +57,13 @@ class Homepage extends StatelessWidget {
                 children: [
                   // Camera Button
                   IconButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MyCanvas(title: 'Canvas'),
-                      ),
-                    ),
+                    onPressed: () async {
+                      final File? imageFile =
+                          await pickImage(ImageSource.camera);
+
+                      if (imageFile != null)
+                        Navigator.of(context).pushReplacementNamed('/canvas');
+                    },
                     icon: Icon(
                       Icons.camera_alt,
                       size: 80,
