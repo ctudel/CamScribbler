@@ -32,9 +32,7 @@ class ControlButton extends StatelessWidget {
     return IconButton(
       icon: Icon(
         toolIcon,
-        color: controller.freeStyleMode == mode
-            ? Theme.of(context).colorScheme.primary
-            : null,
+        color: controller.freeStyleMode == mode ? Colors.amber : null,
       ),
       onPressed: () {
         controller.freeStyleMode =

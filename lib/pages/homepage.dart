@@ -32,7 +32,11 @@ class Homepage extends StatelessWidget {
                 children: [
                   // Camera Button
                   IconButton(
-                    onPressed: null,
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MyCanvas(title: 'Canvas'),
+                      ),
+                    ),
                     icon: Icon(
                       Icons.camera_alt,
                       size: 80,
@@ -46,11 +50,7 @@ class Homepage extends StatelessWidget {
                 children: [
                   // Upload Button
                   IconButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MyCanvas(title: 'Canvas'),
-                      ),
-                    ),
+                    onPressed: null,
                     icon: Icon(
                       Icons.upload,
                       size: 80,
