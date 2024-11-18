@@ -6,7 +6,7 @@ late final Database _database;
 Future<void> init() async {
   print('Checking initialization');
 
-  final String path = join(await getDatabasesPath(), 'photos.db');
+  final String path = join(await getDatabasesPath(), 'drawings.db');
 
   _database = await openDatabase(
     path,
