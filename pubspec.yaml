@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.1.2
   simple_animations: ^5.1.0
   adaptive_theme: ^3.6.0
+  sqflite: ^2.4.1
 
 dev_dependencies:
   flutter_test:

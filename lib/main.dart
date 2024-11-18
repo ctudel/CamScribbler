@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
+import 'database/db.dart' as db;
 import 'widgets/widgets.dart';
 import 'models/routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  await db.init();
+  await db.checkTableSchema();
 }
 
 class MyApp extends StatelessWidget {
