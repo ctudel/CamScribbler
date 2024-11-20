@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:cam_scribbler/models/models.dart';
 import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:cam_scribbler/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +132,9 @@ class _MyCanvasState extends State<MyCanvas> {
             ])
           ];
           _controller.addDrawables(drawables);
+          // TODO: Call these when necessary
+          // final jsonStr = _drawablesToJSON(drawables, _controller);
+          // print(_drawablesToJSON(drawables, _controller));
 
           return ChangeNotifierProvider<CanvasSettingProvider>(
             // Provider for palette options
@@ -222,27 +227,49 @@ class _MyCanvasState extends State<MyCanvas> {
           );
         });
   }
+}
 
-  // FIXME: Create a wrapper class and create toJSON and fromJSON methods utilizing drawable fields
-  /// Encode all drawables as JSON
-  _drawablesToJSON(List<Drawable> drawables, PainterController controller) {
-    List<FreeStyleDrawable> freeStyleDrawables = [];
+// FIXME: Create a wrapper class and create toJSON and fromJSON methods utilizing drawable fields
+// NOTE: This may be sufficient, and another helper method for _JSONtoDrawables could be created
+/// Encode all drawables as JSON
+String _drawablesToJSON(
+    List<Drawable> drawables, PainterController controller) {
+  List<Map<String, dynamic>> listOfMaps = []; // stores converted drawables
 
-    for (final drawable in drawables) {
-      if (drawable.runtimeType == FreeStyleDrawable) {
-        final fsDrawable = drawable as FreeStyleDrawable;
-        print(fsDrawable.path);
-        freeStyleDrawables.add(fsDrawable);
-      }
-
-      if (drawable.runtimeType == EraseDrawable) {
-        final eraseDrawable = drawable as EraseDrawable;
-        print(eraseDrawable.path);
-      }
+  // Make all drawables into JSON format
+  for (final Drawable drawable in drawables) {
+    if (drawable is FreeStyleDrawable) {
+      final FreeStyleDrawable fsDrawable = drawable;
+      // NOTE: expected data to store into "drawable" in JSON
+      listOfMaps.add({
+        'type': 'FreeStyleDrawable',
+        'stroke': fsDrawable.strokeWidth,
+        'color': '${fsDrawable.color}',
+        'path': fsDrawable.path
+            .map((offset) => {
+                  'dx': offset.dx,
+                  'dy': offset.dy,
+                })
+            .toList(),
+      });
     }
 
-    _controller.addDrawables(freeStyleDrawables);
+    if (drawable is EraseDrawable) {
+      final EraseDrawable erasable = drawable;
+      listOfMaps.add({
+        'type': 'EraseDrawable',
+        'stroke': erasable.strokeWidth,
+        'path': erasable.path
+            .map((offset) => {
+                  'dx': offset.dx,
+                  'dy': offset.dy,
+                })
+            .toList(),
+      });
+    }
   }
+
+  return jsonEncode(listOfMaps);
 }
 
 // =======================================

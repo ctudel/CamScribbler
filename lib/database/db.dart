@@ -1,3 +1,4 @@
+import 'package:cam_scribbler/models/models.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -12,7 +13,7 @@ Future<void> init() async {
     path,
     onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE drawings (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date DATE, path TEXT)');
+          'CREATE TABLE drawings (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date DATE, path TEXT, drawables TEXT)');
       print('Table created');
     },
     version: 1,
@@ -22,13 +23,12 @@ Future<void> init() async {
 }
 
 /// Insert an image object
-// Future<void> savePhoto(Photo photo) async {
-//   _database.insert(
-//     'photos',
-//     photo.toMap(),
-//     conflictAlgorithm: ConflictAlgorithm.replace,
-//   );
-// }
+Future<void> saveDrawing(Drawing drawing) async {
+  _database.insert(
+    'photos',
+    drawing.toMap(),
+  );
+}
 
 // FIXME: Debugging databse only, delete once finished
 Future<void> checkTableSchema() async {
