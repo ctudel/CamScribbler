@@ -1,3 +1,4 @@
+import 'package:cam_scribbler/models/models.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/pages.dart';
@@ -5,14 +6,10 @@ import '../main.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
   '/': (context) => homepage,
-  '/canvas': (context) => canvas,
   '/drawings': (context) => drawings,
   '/settings': (context) => settings,
   '/save': (context) => savePage,
 };
-
-// Drawing Canvas
-const MyCanvas canvas = MyCanvas(title: 'Canvas');
 
 // Homepage
 const Homepage homepage = Homepage();
@@ -26,4 +23,25 @@ const MainScaffold settings =
     MainScaffold(title: 'Settings', pageIndex: 2, child: Settings());
 
 // Save Image Page
-const savePage = SaveDrawing();
+const SaveDrawing savePage = SaveDrawing();
+
+// ====================
+// Routes w/ parameters
+// ====================
+
+// OnGenerate Routes
+MaterialPageRoute genRoutes(RouteSettings settings) {
+  if (settings.name == '/canvas')
+    return canvasPage(settings.arguments as Drawing);
+  else
+    throw 'No route provided';
+}
+
+canvasPage(args) {
+  return MaterialPageRoute<MyCanvas>(builder: (context) {
+    return MyCanvas(
+      title: 'Drawing Canvas',
+      imagePath: args.path, // extract the path from Drawing object in args
+    );
+  });
+}

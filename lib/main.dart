@@ -3,7 +3,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'database/db.dart' as db;
 import 'widgets/widgets.dart';
-import 'models/routes.dart';
+import 'models/models.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         title: 'My App',
         theme: theme,
         darkTheme: darkTheme,
+        onGenerateRoute: (RouteSettings settings) => genRoutes(settings),
         routes: routes,
       ),
     );

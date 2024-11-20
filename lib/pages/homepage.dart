@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cam_scribbler/models/models.dart';
 import 'package:cam_scribbler/widgets/my_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +21,7 @@ class _HomepageState extends State<Homepage> {
   /// Take a photo or pick photo one from the gallery
   Future<File?> pickImage(ImageSource source) async {
     try {
-      // Take photo or pick from gallery
-      final XFile? image =
-          await ImagePicker().pickImage(source: ImageSource.camera);
+      final XFile? image = await ImagePicker().pickImage(source: source);
 
       if (image == null) return null; // no image picked or taken
 
@@ -30,6 +29,7 @@ class _HomepageState extends State<Homepage> {
     } catch (e) {
       print('Failed to pick image $e');
     }
+    return null; // in case try fails
   }
 
   @override
@@ -41,7 +41,7 @@ class _HomepageState extends State<Homepage> {
           SizedBox(
             height: MediaQuery.of(context).size.height / 8,
           ),
-          // Header
+          // Page Header
           const Text(
             'CamScribbler',
             style: TextStyle(fontSize: 48),
@@ -61,8 +61,18 @@ class _HomepageState extends State<Homepage> {
                       final File? imageFile =
                           await pickImage(ImageSource.camera);
 
-                      if (imageFile != null)
-                        Navigator.of(context).pushReplacementNamed('/canvas');
+                      if (imageFile != null) {
+                        Navigator.pushNamed(
+                          context,
+                          '/canvas',
+                          arguments: Drawing(
+                            id: 0,
+                            title: 'placeholder',
+                            date: DateTime.now(),
+                            path: imageFile.path,
+                          ),
+                        );
+                      }
                     },
                     icon: Icon(
                       Icons.camera_alt,
@@ -77,7 +87,23 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   // Upload Button
                   IconButton(
-                    onPressed: null,
+                    onPressed: () async {
+                      final File? imageFile =
+                          await pickImage(ImageSource.gallery);
+
+                      if (imageFile != null) {
+                        Navigator.pushNamed(
+                          context,
+                          '/canvas',
+                          arguments: Drawing(
+                            id: 0,
+                            title: 'placeholder',
+                            date: DateTime.now(),
+                            path: imageFile.path,
+                          ),
+                        );
+                      }
+                    },
                     icon: Icon(
                       Icons.upload,
                       size: 80,

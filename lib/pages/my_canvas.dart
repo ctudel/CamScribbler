@@ -1,18 +1,23 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:cam_scribbler/widgets/widgets.dart';
+import 'package:cam_scribbler/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/widgets.dart';
-import '../providers/providers.dart';
-
 class MyCanvas extends StatefulWidget {
-  const MyCanvas({super.key, required this.title});
+  const MyCanvas({
+    super.key,
+    required this.title,
+    required this.imagePath,
+  });
 
   final String title;
+  final String imagePath;
 
   @override
   State<MyCanvas> createState() => _MyCanvasState();
@@ -39,7 +44,7 @@ class _MyCanvasState extends State<MyCanvas> {
       ),
     );
 
-    imageFuture = getUiImage('assets/cat.jpeg');
+    imageFuture = getUiImage(widget.imagePath);
     initBackground();
   }
 
@@ -55,11 +60,9 @@ class _MyCanvasState extends State<MyCanvas> {
 
   /// Gets an Image asset that is compatible with dart Ui
   Future<ui.Image> getUiImage(String imageAssetPath) async {
-    final ByteData assetImageByteData = await rootBundle.load(imageAssetPath);
+    final Uint8List bytes = await File(imageAssetPath).readAsBytes();
 
-    final codec = await ui.instantiateImageCodec(
-      assetImageByteData.buffer.asUint8List(),
-    );
+    final codec = await ui.instantiateImageCodec(bytes);
 
     final ui.Image image = (await codec.getNextFrame()).image;
 
@@ -77,7 +80,59 @@ class _MyCanvasState extends State<MyCanvas> {
             );
           }
 
+          if (!snapshot.hasData) throw 'No photo found';
+
+          // TODO: Take this idea and try to save it into database
+          List<Drawable> drawables = [
+            FreeStyleDrawable(strokeWidth: 5, path: [
+              const Offset(142.0, 112.5),
+              const Offset(142.0, 116.0),
+              const Offset(139.0, 119.0),
+              const Offset(137.5, 124.0),
+              const Offset(136.0, 128.5),
+              const Offset(134.0, 135.0),
+              const Offset(132.5, 140.0),
+              const Offset(131.0, 148.0),
+              const Offset(131.0, 159.0),
+              const Offset(129.5, 164.0),
+              const Offset(129.5, 170.0),
+              const Offset(129.5, 175.0),
+              const Offset(128.0, 178.0),
+              const Offset(128.0, 184.5),
+              const Offset(128.0, 188.0),
+              const Offset(129.5, 192.5),
+              const Offset(129.5, 194.0),
+              const Offset(131.0, 194.0),
+              const Offset(136.0, 196.0),
+              const Offset(137.5, 197.5),
+              const Offset(140.5, 197.5),
+              const Offset(144.0, 199.0),
+              const Offset(145.5, 199.0),
+              const Offset(148.5, 200.5),
+              const Offset(155.0, 204.0),
+              const Offset(158.0, 205.5),
+              const Offset(172.5, 210.0),
+              const Offset(190.0, 213.5),
+              const Offset(198.0, 213.5),
+              const Offset(212.5, 213.5),
+              const Offset(225.5, 213.5),
+              const Offset(236.5, 213.5),
+              const Offset(244.5, 213.5),
+              const Offset(248.0, 212.0),
+              const Offset(249.5, 212.0),
+              const Offset(251.0, 212.0),
+              const Offset(252.5, 215.0),
+              const Offset(244.5, 237.5),
+              const Offset(243.0, 242.0),
+              const Offset(241.5, 247.0),
+              const Offset(240.0, 252.0),
+              const Offset(238.0, 255.0)
+            ])
+          ];
+          _controller.addDrawables(drawables);
+
           return ChangeNotifierProvider<CanvasSettingProvider>(
+            // Provider for palette options
             create: (BuildContext _) => CanvasSettingProvider(),
             child: Scaffold(
               appBar: AppBar(
@@ -166,6 +221,27 @@ class _MyCanvasState extends State<MyCanvas> {
             ),
           );
         });
+  }
+
+  // FIXME: Create a wrapper class and create toJSON and fromJSON methods utilizing drawable fields
+  /// Encode all drawables as JSON
+  _drawablesToJSON(List<Drawable> drawables, PainterController controller) {
+    List<FreeStyleDrawable> freeStyleDrawables = [];
+
+    for (final drawable in drawables) {
+      if (drawable.runtimeType == FreeStyleDrawable) {
+        final fsDrawable = drawable as FreeStyleDrawable;
+        print(fsDrawable.path);
+        freeStyleDrawables.add(fsDrawable);
+      }
+
+      if (drawable.runtimeType == EraseDrawable) {
+        final eraseDrawable = drawable as EraseDrawable;
+        print(eraseDrawable.path);
+      }
+    }
+
+    _controller.addDrawables(freeStyleDrawables);
   }
 }
 
