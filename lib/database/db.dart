@@ -22,10 +22,16 @@ Future<void> init() async {
   print('finished');
 }
 
+getDrawings() async {
+  return _database.query(
+    'drawings',
+  );
+}
+
 /// Insert an image object
 Future<void> saveDrawing(Drawing drawing) async {
   _database.insert(
-    'photos',
+    'drawings',
     drawing.toMap(),
   );
 }

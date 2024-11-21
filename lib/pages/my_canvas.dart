@@ -1,14 +1,16 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:cam_scribbler/widgets/widgets.dart';
-import 'package:cam_scribbler/providers/providers.dart';
-import 'package:cam_scribbler/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
+import 'package:cam_scribbler/widgets/widgets.dart';
+import 'package:cam_scribbler/providers/providers.dart';
+import 'package:cam_scribbler/models/models.dart';
 
 class MyCanvas extends StatefulWidget {
   const MyCanvas({
@@ -104,7 +106,7 @@ class _MyCanvasState extends State<MyCanvas> {
 
                     print(byteData);
 
-                    // Store image temporarily for user to save if desired
+                    // Store image temporarily for user to save if desired w/o a rebuild
                     context.read<CanvasProvider>().createTempImage(byteData);
 
                     // Navigate to save page and access the image
@@ -113,7 +115,7 @@ class _MyCanvasState extends State<MyCanvas> {
                       '/save',
                       arguments: Drawing(
                         title: '',
-                        date: DateTime.now(),
+                        date: DateFormat.yMMMd('en_US').format(DateTime.now()),
                         path: widget.imagePath,
                         drawables: drawablesToJson(_controller),
                       ),

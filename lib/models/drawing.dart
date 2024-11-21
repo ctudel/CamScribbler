@@ -7,7 +7,7 @@ class Drawing {
   });
 
   final String title;
-  final DateTime date;
+  final String date;
   final String path;
   final String drawables;
 

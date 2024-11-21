@@ -66,7 +66,7 @@ class _HomepageState extends State<Homepage> {
                           '/canvas',
                           arguments: Drawing(
                             title: 'placeholder',
-                            date: DateTime.now(),
+                            date: '',
                             path: imageFile.path,
                             drawables: '',
                           ),
@@ -96,7 +96,7 @@ class _HomepageState extends State<Homepage> {
                           '/canvas',
                           arguments: Drawing(
                             title: 'placeholder',
-                            date: DateTime.now(),
+                            date: '',
                             path: imageFile.path,
                             drawables: '',
                           ),
