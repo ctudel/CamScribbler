@@ -83,110 +83,116 @@ class _MyCanvasState extends State<MyCanvas> {
 
           if (!snapshot.hasData) throw 'No photo found';
 
-          return ChangeNotifierProvider<CanvasSettingProvider>(
-            // Provider for palette options
-            create: (BuildContext _) => CanvasSettingProvider(),
-            child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                title: Text(widget.title),
-                actions: [
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                      Navigator.of(context).pushReplacementNamed(
-                        '/save',
-                        arguments: Drawing(
-                          title: '',
-                          date: DateTime.now(),
-                          path: widget.imagePath,
-                          drawables: drawablesToJson(_controller),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        color: Colors.black,
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              title: Text(widget.title),
+              actions: [
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                  ),
+                  onPressed: () async {
+                    // render the drawing as an image
+                    final ui.Image renderedImage =
+                        await _controller.renderImage(Size(
+                            backgroundImage!.width * 1.0,
+                            backgroundImage!.height * 1.0));
+                    print(renderedImage);
+
+                    final Uint8List? byteData = await renderedImage.pngBytes;
+
+                    print(byteData);
+
+                    // Store image temporarily for user to save if desired
+                    context.read<CanvasProvider>().createTempImage(byteData);
+
+                    // Navigate to save page and access the image
+                    Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                    Navigator.of(context).pushReplacementNamed(
+                      '/save',
+                      arguments: Drawing(
+                        title: '',
+                        date: DateTime.now(),
+                        path: widget.imagePath,
+                        drawables: drawablesToJson(_controller),
                       ),
+                    );
+                  },
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(
+                      color: Colors.black,
                     ),
                   ),
-                ],
-              ),
-              body: Stack(
-                children: [
-                  // Create Canvas with background image
-                  Positioned.fill(
-                    child: Center(
-                      child: AspectRatio(
-                          aspectRatio:
-                              backgroundImage!.width / backgroundImage!.height,
-                          child: FlutterPainter(
-                            controller: _controller,
-                          )),
-                    ),
+                ),
+              ],
+            ),
+            body: Stack(
+              children: [
+                // Create Canvas with background image
+                Positioned.fill(
+                  child: Center(
+                    child: AspectRatio(
+                        aspectRatio:
+                            backgroundImage!.width / backgroundImage!.height,
+                        child: FlutterPainter(
+                          controller: _controller,
+                        )),
                   ),
-                  // Canvas Settings
-                  StrokePicker(controller: _controller),
-                  Palette(controller: _controller),
-                  Positioned(
-                      top: 10,
-                      left: 110,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _controller.undo();
-                          });
-                        },
-                        icon: Icon(PhosphorIcons.arrowCounterClockwise()),
-                      ))
-                ],
-              ),
-              // Canvas Toolbar
-              bottomNavigationBar:
-                  ValueListenableBuilder<PainterControllerValue>(
-                valueListenable: _controller,
-                builder: (BuildContext context, PainterControllerValue _,
-                    Widget? __) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      // Move Canvas
-                      ControlButton(
-                        controller: _controller,
-                        toolType: 'hand',
-                      ),
-                      // Draw
-                      ControlButton(
-                        controller: _controller,
-                        toolType: 'draw',
-                      ),
-                      // Erase
-                      ControlButton(
-                        controller: _controller,
-                        toolType: 'eraser',
-                      ),
-                      // Clear Canvas
-                      IconButton(
-                        onPressed: _controller.clearDrawables,
-                        icon: const Icon(Icons.clear),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                ),
+                // Canvas Settings
+                StrokePicker(controller: _controller),
+                Palette(controller: _controller),
+                Positioned(
+                    top: 10,
+                    left: 110,
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _controller.undo();
+                        });
+                      },
+                      icon: Icon(PhosphorIcons.arrowCounterClockwise()),
+                    ))
+              ],
+            ),
+            // Canvas Toolbar
+            bottomNavigationBar: ValueListenableBuilder<PainterControllerValue>(
+              valueListenable: _controller,
+              builder:
+                  (BuildContext context, PainterControllerValue _, Widget? __) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    // Move Canvas
+                    ControlButton(
+                      controller: _controller,
+                      toolType: 'hand',
+                    ),
+                    // Draw
+                    ControlButton(
+                      controller: _controller,
+                      toolType: 'draw',
+                    ),
+                    // Erase
+                    ControlButton(
+                      controller: _controller,
+                      toolType: 'eraser',
+                    ),
+                    // Clear Canvas
+                    IconButton(
+                      onPressed: _controller.clearDrawables,
+                      icon: const Icon(Icons.clear),
+                    ),
+                  ],
+                );
+              },
             ),
           );
         });
   }
 }
-
-// FIXME: Create a wrapper class and create toJSON and fromJSON methods utilizing drawable fields
-// NOTE: This may be sufficient, and another helper method for _JSONtoDrawables could be created
-/// Encode all drawables as JSON
 
 // =======================================
 // Custom Settings Widget for Canvas Tools
@@ -207,8 +213,7 @@ class Palette extends StatefulWidget {
 class _PaletteState extends State<Palette> {
   @override
   Widget build(BuildContext context) {
-    CanvasSettingProvider provider =
-        Provider.of<CanvasSettingProvider>(context);
+    CanvasProvider provider = Provider.of<CanvasProvider>(context);
 
     return Positioned(
       top: 10,
@@ -357,8 +362,7 @@ class StrokePicker extends StatefulWidget {
 class _StrokePickerState extends State<StrokePicker> {
   @override
   Widget build(BuildContext context) {
-    CanvasSettingProvider provider =
-        Provider.of<CanvasSettingProvider>(context);
+    CanvasProvider provider = Provider.of<CanvasProvider>(context);
 
     return Positioned(
       top: 10,

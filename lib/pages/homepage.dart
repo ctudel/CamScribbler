@@ -4,7 +4,6 @@ import 'package:cam_scribbler/models/models.dart';
 import 'package:cam_scribbler/widgets/my_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'pages.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({

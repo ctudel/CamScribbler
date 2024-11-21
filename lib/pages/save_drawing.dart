@@ -1,8 +1,11 @@
-import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
-import 'package:cam_scribbler/models/models.dart';
 import 'package:flutter/material.dart';
-import '../widgets/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:cam_scribbler/widgets/widgets.dart';
+import 'package:cam_scribbler/models/models.dart';
+import 'package:cam_scribbler/providers/providers.dart';
 
 class SaveDrawing extends StatelessWidget {
   const SaveDrawing({super.key, required this.drawing});
@@ -11,8 +14,6 @@ class SaveDrawing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Image image = Image.file(File(drawing.path), fit: BoxFit.scaleDown);
-
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Scaffold(
@@ -28,7 +29,8 @@ class SaveDrawing extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: image,
+                child: Image.memory(
+                    context.watch<CanvasProvider>().imageData as Uint8List),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

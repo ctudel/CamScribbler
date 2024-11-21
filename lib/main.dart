@@ -1,12 +1,17 @@
+import 'package:cam_scribbler/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:provider/provider.dart';
 
 import 'database/db.dart' as db;
 import 'widgets/widgets.dart';
 import 'models/models.dart';
 
 void main() async {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<CanvasProvider>(
+    create: (_) => CanvasProvider(),
+    child: const MyApp(),
+  ));
   await db.init();
   await db.checkTableSchema();
   // await db.deleteDatabase();

@@ -37,7 +37,7 @@ MaterialPageRoute genRoutes(RouteSettings settings) {
   };
 }
 
-canvasPage(args) {
+MaterialPageRoute<MyCanvas> canvasPage(args) {
   return MaterialPageRoute<MyCanvas>(builder: (context) {
     return MyCanvas(
       title: 'Drawing Canvas',
@@ -46,8 +46,8 @@ canvasPage(args) {
   });
 }
 
-saveDrawingPage(args) {
-  return MaterialPageRoute<MyCanvas>(builder: (context) {
+MaterialPageRoute<SaveDrawing> saveDrawingPage(args) {
+  return MaterialPageRoute<SaveDrawing>(builder: (context) {
     return SaveDrawing(
       drawing: args,
     );
