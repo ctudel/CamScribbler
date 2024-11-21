@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:cam_scribbler/models/models.dart';
 import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:cam_scribbler/providers/providers.dart';
+import 'package:cam_scribbler/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -83,58 +82,6 @@ class _MyCanvasState extends State<MyCanvas> {
           }
 
           if (!snapshot.hasData) throw 'No photo found';
-
-          // TODO: Take this idea and try to save it into database
-          List<Drawable> drawables = [
-            FreeStyleDrawable(strokeWidth: 5, path: [
-              const Offset(142.0, 112.5),
-              const Offset(142.0, 116.0),
-              const Offset(139.0, 119.0),
-              const Offset(137.5, 124.0),
-              const Offset(136.0, 128.5),
-              const Offset(134.0, 135.0),
-              const Offset(132.5, 140.0),
-              const Offset(131.0, 148.0),
-              const Offset(131.0, 159.0),
-              const Offset(129.5, 164.0),
-              const Offset(129.5, 170.0),
-              const Offset(129.5, 175.0),
-              const Offset(128.0, 178.0),
-              const Offset(128.0, 184.5),
-              const Offset(128.0, 188.0),
-              const Offset(129.5, 192.5),
-              const Offset(129.5, 194.0),
-              const Offset(131.0, 194.0),
-              const Offset(136.0, 196.0),
-              const Offset(137.5, 197.5),
-              const Offset(140.5, 197.5),
-              const Offset(144.0, 199.0),
-              const Offset(145.5, 199.0),
-              const Offset(148.5, 200.5),
-              const Offset(155.0, 204.0),
-              const Offset(158.0, 205.5),
-              const Offset(172.5, 210.0),
-              const Offset(190.0, 213.5),
-              const Offset(198.0, 213.5),
-              const Offset(212.5, 213.5),
-              const Offset(225.5, 213.5),
-              const Offset(236.5, 213.5),
-              const Offset(244.5, 213.5),
-              const Offset(248.0, 212.0),
-              const Offset(249.5, 212.0),
-              const Offset(251.0, 212.0),
-              const Offset(252.5, 215.0),
-              const Offset(244.5, 237.5),
-              const Offset(243.0, 242.0),
-              const Offset(241.5, 247.0),
-              const Offset(240.0, 252.0),
-              const Offset(238.0, 255.0)
-            ])
-          ];
-          _controller.addDrawables(drawables);
-          // TODO: Call these when necessary
-          // final jsonStr = _drawablesToJSON(drawables, _controller);
-          // print(_drawablesToJSON(drawables, _controller));
 
           return ChangeNotifierProvider<CanvasSettingProvider>(
             // Provider for palette options
@@ -232,45 +179,6 @@ class _MyCanvasState extends State<MyCanvas> {
 // FIXME: Create a wrapper class and create toJSON and fromJSON methods utilizing drawable fields
 // NOTE: This may be sufficient, and another helper method for _JSONtoDrawables could be created
 /// Encode all drawables as JSON
-String _drawablesToJSON(
-    List<Drawable> drawables, PainterController controller) {
-  List<Map<String, dynamic>> listOfMaps = []; // stores converted drawables
-
-  // Make all drawables into JSON format
-  for (final Drawable drawable in drawables) {
-    if (drawable is FreeStyleDrawable) {
-      final FreeStyleDrawable fsDrawable = drawable;
-      // NOTE: expected data to store into "drawable" in JSON
-      listOfMaps.add({
-        'type': 'FreeStyleDrawable',
-        'stroke': fsDrawable.strokeWidth,
-        'color': '${fsDrawable.color}',
-        'path': fsDrawable.path
-            .map((offset) => {
-                  'dx': offset.dx,
-                  'dy': offset.dy,
-                })
-            .toList(),
-      });
-    }
-
-    if (drawable is EraseDrawable) {
-      final EraseDrawable erasable = drawable;
-      listOfMaps.add({
-        'type': 'EraseDrawable',
-        'stroke': erasable.strokeWidth,
-        'path': erasable.path
-            .map((offset) => {
-                  'dx': offset.dx,
-                  'dy': offset.dy,
-                })
-            .toList(),
-      });
-    }
-  }
-
-  return jsonEncode(listOfMaps);
-}
 
 // =======================================
 // Custom Settings Widget for Canvas Tools
