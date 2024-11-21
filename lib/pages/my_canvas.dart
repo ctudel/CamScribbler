@@ -97,7 +97,15 @@ class _MyCanvasState extends State<MyCanvas> {
                     ),
                     onPressed: () {
                       Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                      Navigator.of(context).pushReplacementNamed('/save');
+                      Navigator.of(context).pushReplacementNamed(
+                        '/save',
+                        arguments: Drawing(
+                          title: '',
+                          date: DateTime.now(),
+                          path: widget.imagePath,
+                          drawables: drawablesToJson(_controller),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Save',

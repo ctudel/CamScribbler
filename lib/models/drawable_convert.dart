@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 
-String drawablesToJson(List<Drawable> drawables, PainterController controller) {
+String drawablesToJson(PainterController controller) {
   List<Map<String, dynamic>> listOfMaps = []; // stores converted drawables
 
   // Make all drawables into JSON format
-  for (final Drawable drawable in drawables) {
+  for (final Drawable drawable in controller.drawables) {
     if (drawable is FreeStyleDrawable) {
       final FreeStyleDrawable fsDrawable = drawable;
       listOfMaps.add({
@@ -41,7 +41,7 @@ String drawablesToJson(List<Drawable> drawables, PainterController controller) {
   return jsonEncode(listOfMaps);
 }
 
-List<Drawable> jsonToDrawables(String jsonStr, PainterController controller) {
+List<Drawable> jsonToDrawables(String jsonStr) {
   final json = jsonDecode(jsonStr);
   final List<Drawable> drawables = <Drawable>[];
 

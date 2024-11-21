@@ -1,15 +1,17 @@
+import 'dart:io';
+
+import 'package:cam_scribbler/models/models.dart';
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 
 class SaveDrawing extends StatelessWidget {
-  const SaveDrawing({super.key});
+  const SaveDrawing({super.key, required this.drawing});
+
+  final Drawing drawing;
 
   @override
   Widget build(BuildContext context) {
-    final Image image = Image.asset(
-      'assets/cat.jpeg',
-      fit: BoxFit.contain,
-    );
+    final Image image = Image.file(File(drawing.path), fit: BoxFit.scaleDown);
 
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -28,11 +30,10 @@ class SaveDrawing extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: image,
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Nov 11, 2024'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('${drawing.date}'),
               ),
-              const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
