@@ -40,13 +40,7 @@ class _DrawingGalleryState extends State<DrawingGallery> {
       fit: BoxFit.contain,
     );
 
-    // // FIXME: Fetch from a database of file paths instead of static generation
-    // final List<Map> myImages =
-    //     List.generate(10, (index) => {"id": index, "image": image});
-
     const style = TextStyle(color: Colors.black);
-
-    // FIXME: Skeleton Grid of drawings
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

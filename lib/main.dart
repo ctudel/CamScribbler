@@ -13,7 +13,6 @@ void main() async {
     child: const MyApp(),
   ));
   await db.init();
-  // await db.checkTableSchema();
   // await db.deleteDatabase();
 }
 
