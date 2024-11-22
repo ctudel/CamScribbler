@@ -23,9 +23,16 @@ Future<void> init() async {
 }
 
 getDrawings() async {
-  return _database.query(
+  final List<Map<String, dynamic>> query = await _database.query(
     'drawings',
   );
+
+  // Iterate through query converting each map to a Drawing object and return
+  return query
+      .map<Drawing>(
+        (Map<String, dynamic> map) => Drawing.fromMap(map),
+      )
+      .toList();
 }
 
 /// Insert an image object
@@ -34,13 +41,6 @@ Future<void> saveDrawing(Drawing drawing) async {
     'drawings',
     drawing.toMap(),
   );
-}
-
-// FIXME: Debugging databse only, delete once finished
-Future<void> checkTableSchema() async {
-  final List<Map<String, dynamic>> tableInfo =
-      await _database.rawQuery('PRAGMA table_info(drawings)');
-  print('Table schema: $tableInfo');
 }
 
 // FIXME: Debugging database only, delete once finished

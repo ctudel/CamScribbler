@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:gal/gal.dart';
 
 import 'package:cam_scribbler/database/db.dart' as db;
 import 'package:cam_scribbler/widgets/widgets.dart';
@@ -23,6 +25,9 @@ class _SaveDrawingState extends State<SaveDrawing> {
 
   @override
   Widget build(BuildContext context) {
+    final Uint8List imageBytes =
+        context.watch<CanvasProvider>().imageData ?? Uint8List(0);
+
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Scaffold(
@@ -58,7 +63,6 @@ class _SaveDrawingState extends State<SaveDrawing> {
                       backgroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
-                      _getDrawings();
                       Navigator.of(context).pushReplacementNamed('/');
                     },
                     child: Text(
@@ -71,14 +75,15 @@ class _SaveDrawingState extends State<SaveDrawing> {
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.amber,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       final Drawing drawing = Drawing(
-                        title: _title,
+                        title: (_title != '') ? _title : 'Untitled',
                         date: widget.drawing.date,
-                        path: widget.drawing.path,
+                        path: await _getImagePath(_title, imageBytes),
                         drawables: widget.drawing.drawables,
                       );
                       _uploadDrawing(drawing);
+                      Navigator.of(context).pushReplacementNamed('/drawings');
                     },
                     child: const Text(
                       'Done',
@@ -102,11 +107,30 @@ class _SaveDrawingState extends State<SaveDrawing> {
 
 void _uploadDrawing(Drawing drawing) async {
   await db.saveDrawing(drawing);
-  print(
-      'successfully uploaded Drawing: ${drawing.title}, ${drawing.date}, ${drawing.path}, ${drawing.drawables}');
 }
 
-void _getDrawings() async {
-  final drawings = await db.getDrawings();
-  print(drawings);
+Future<String> _getImagePath(String title, Uint8List imageBytes) async {
+  // Get Flutter app private storage directory
+  final directory = await getApplicationDocumentsDirectory();
+  final imagePath = '${directory.path}/${title}_${DateTime.now()}.jpg';
+
+  // Create file at path and write bytes to file
+  await File(imagePath).writeAsBytes(imageBytes);
+
+  // Check permissions
+  final bool hasAccess = await Gal.hasAccess();
+
+  // request permissions if needed
+  bool access = true;
+  if (!hasAccess) access = await Gal.requestAccess();
+
+  // Stores the image at given file's path
+  if (access)
+    try {
+      await Gal.putImage(imagePath);
+    } catch (e) {
+      print('Error while saving image: $e');
+    }
+
+  return imagePath;
 }

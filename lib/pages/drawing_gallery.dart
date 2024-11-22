@@ -1,29 +1,60 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-class DrawingGallery extends StatelessWidget {
+import 'package:cam_scribbler/models/models.dart';
+import 'package:cam_scribbler/database/db.dart' as db;
+
+class DrawingGallery extends StatefulWidget {
   const DrawingGallery({super.key});
 
   @override
+  State<DrawingGallery> createState() => _DrawingGalleryState();
+}
+
+class _DrawingGalleryState extends State<DrawingGallery> {
+  late List<Drawing> _myImages = <Drawing>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _getDrawings();
+  }
+
+  void _getDrawings() async {
+    final drawings = await db.getDrawings();
+    // Debugging purposes only
+    print(drawings);
+    setState(() {
+      _myImages = drawings;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(_myImages.runtimeType);
+    print(_myImages);
+
     final Image image = Image.asset(
       'assets/cat.jpeg',
       fit: BoxFit.contain,
     );
 
-    // FIXME: Fetch from a database of file paths instead of static generation
-    final List<Map> myImages =
-        List.generate(10, (index) => {"id": index, "image": image});
+    // // FIXME: Fetch from a database of file paths instead of static generation
+    // final List<Map> myImages =
+    //     List.generate(10, (index) => {"id": index, "image": image});
 
     const style = TextStyle(color: Colors.black);
 
     // FIXME: Skeleton Grid of drawings
+
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200,
-        childAspectRatio: 2 / 2,
       ),
-      itemCount: myImages.length,
+      itemCount: _myImages.length,
       itemBuilder: (context, index) {
+        final Drawing drawing = _myImages[index];
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -36,13 +67,17 @@ class DrawingGallery extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: Column(
                   children: [
-                    myImages[index]["image"],
-                    const Text(
-                      'My Drawing',
+                    Flexible(
+                      child: Image.file(
+                        File(drawing.path),
+                      ),
+                    ),
+                    Text(
+                      drawing.title,
                       style: style,
                     ),
-                    const Text(
-                      'Nov 11, 2024',
+                    Text(
+                      drawing.date,
                       style: style,
                     ),
                   ],

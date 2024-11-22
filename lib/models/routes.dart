@@ -21,14 +21,11 @@ const MainScaffold drawings =
 const MainScaffold settings =
     MainScaffold(title: 'Settings', pageIndex: 2, child: Settings());
 
-// // Save Image Page
-// const SaveDrawing savePage = SaveDrawing();
-
 // ====================
 // Routes w/ parameters
 // ====================
 
-// OnGenerate Routes
+/// Generates paramter routes
 MaterialPageRoute genRoutes(RouteSettings settings) {
   return switch (settings.name) {
     '/canvas' => canvasPage(settings.arguments as Drawing),
@@ -37,6 +34,7 @@ MaterialPageRoute genRoutes(RouteSettings settings) {
   };
 }
 
+/// Drawing Canvas Page Route
 MaterialPageRoute<MyCanvas> canvasPage(args) {
   return MaterialPageRoute<MyCanvas>(builder: (context) {
     return MyCanvas(
@@ -46,6 +44,7 @@ MaterialPageRoute<MyCanvas> canvasPage(args) {
   });
 }
 
+/// Save Drawing Page Route
 MaterialPageRoute<SaveDrawing> saveDrawingPage(args) {
   return MaterialPageRoute<SaveDrawing>(builder: (context) {
     return SaveDrawing(

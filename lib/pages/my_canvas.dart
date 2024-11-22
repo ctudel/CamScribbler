@@ -100,11 +100,8 @@ class _MyCanvasState extends State<MyCanvas> {
                         await _controller.renderImage(Size(
                             backgroundImage!.width * 1.0,
                             backgroundImage!.height * 1.0));
-                    print(renderedImage);
 
                     final Uint8List? byteData = await renderedImage.pngBytes;
-
-                    print(byteData);
 
                     // Store image temporarily for user to save if desired w/o a rebuild
                     context.read<CanvasProvider>().createTempImage(byteData);
