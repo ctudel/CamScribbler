@@ -8,10 +8,7 @@ import 'widgets/widgets.dart';
 import 'models/models.dart';
 
 void main() async {
-  runApp(ChangeNotifierProvider<CanvasProvider>(
-    create: (_) => CanvasProvider(),
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
   await db.init();
   // await db.deleteDatabase();
 }
@@ -25,12 +22,22 @@ class MyApp extends StatelessWidget {
       light: ThemeData.light(useMaterial3: true),
       dark: ThemeData.dark(useMaterial3: true),
       initial: AdaptiveThemeMode.light,
-      builder: (ThemeData theme, ThemeData darkTheme) => MaterialApp(
-        title: 'My App',
-        theme: theme,
-        darkTheme: darkTheme,
-        onGenerateRoute: (RouteSettings settings) => genRoutes(settings),
-        routes: routes,
+      builder: (ThemeData theme, ThemeData darkTheme) =>
+          // Creates provider at closest ancestor
+          MultiProvider(
+        providers: [
+          ChangeNotifierProvider<CanvasProvider>(
+              create: (_) => CanvasProvider()),
+          ChangeNotifierProvider<SettingsProvider>(
+              create: (_) => SettingsProvider()),
+        ],
+        child: MaterialApp(
+          title: 'My App',
+          theme: theme,
+          darkTheme: darkTheme,
+          onGenerateRoute: (RouteSettings settings) => genRoutes(settings),
+          routes: routes,
+        ),
       ),
     );
   }

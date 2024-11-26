@@ -20,7 +20,7 @@ class MyNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.photo),
-          label: 'Drawings',
+          label: 'Drawing Gallery',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),

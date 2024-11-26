@@ -32,25 +32,6 @@ class _MyCanvasState extends State<MyCanvas> {
   ui.Image? backgroundImage;
   late Future<ui.Image> imageFuture;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = PainterController(
-      settings: const PainterSettings(
-        freeStyle: FreeStyleSettings(
-          mode: FreeStyleMode.draw,
-          color: black,
-          strokeWidth: 5,
-        ),
-        scale: ScaleSettings(enabled: true),
-      ),
-    );
-
-    imageFuture = getUiImage(widget.imagePath);
-    initBackground();
-  }
-
   /// Initializes canvas background image
   void initBackground() async {
     final image = await imageFuture;
@@ -70,6 +51,25 @@ class _MyCanvasState extends State<MyCanvas> {
     final ui.Image image = (await codec.getNextFrame()).image;
 
     return image;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = PainterController(
+      settings: const PainterSettings(
+        freeStyle: FreeStyleSettings(
+          mode: FreeStyleMode.draw,
+          color: black,
+          strokeWidth: 5,
+        ),
+        scale: ScaleSettings(enabled: true),
+      ),
+    );
+
+    imageFuture = getUiImage(widget.imagePath);
+    initBackground();
   }
 
   @override
