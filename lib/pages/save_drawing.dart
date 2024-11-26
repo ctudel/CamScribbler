@@ -49,7 +49,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
                 padding: const EdgeInsets.all(8.0),
                 child: Image.memory(
                     // rebuild with rendered image
-                    context.watch<CanvasProvider>().imageData as Uint8List),
+                    imageBytes),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
