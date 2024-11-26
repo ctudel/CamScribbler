@@ -14,8 +14,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
 const Homepage homepage = Homepage();
 
 // Drawing Gallery
-const MainScaffold drawings =
-    MainScaffold(title: 'My Drawings', pageIndex: 1, child: DrawingGallery());
+const MainScaffold drawings = MainScaffold(
+    title: 'Drawing Gallery', pageIndex: 1, child: DrawingGallery());
 
 // Settings Page
 const MainScaffold settings =
