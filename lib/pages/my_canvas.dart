@@ -17,10 +17,12 @@ class MyCanvas extends StatefulWidget {
     super.key,
     required this.title,
     required this.imagePath,
+    required this.drawables,
   });
 
   final String title;
   final String imagePath;
+  final String drawables;
 
   @override
   State<MyCanvas> createState() => _MyCanvasState();
@@ -66,6 +68,9 @@ class _MyCanvasState extends State<MyCanvas> {
         ),
         scale: ScaleSettings(enabled: true),
       ),
+      drawables: (widget.drawables != '')
+          ? jsonToDrawables(widget.drawables)
+          : const [],
     );
 
     imageFuture = getUiImage(widget.imagePath);

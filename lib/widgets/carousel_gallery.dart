@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -22,41 +23,12 @@ class CarouselWidget extends StatefulWidget {
 class _CarouselWidgetState extends State<CarouselWidget> {
   @override
   Widget build(BuildContext context) {
-    const TextStyle style = TextStyle(color: Colors.black, fontSize: 20);
-
     /// Generate list of widgets using drawings
     final List<Widget> list = List.generate(widget._myImages.length, (index) {
       final Drawing drawing = widget._myImages[index];
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Image.file(
-                      File(drawing.path),
-                    ),
-                  ),
-                  Text(
-                    drawing.title,
-                    style: style,
-                  ),
-                  Text(
-                    drawing.date,
-                    style: style,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      return ImageCard(
+        drawing: drawing,
+        style: const TextStyle(color: Colors.black, fontSize: 20),
       );
     });
 
@@ -82,7 +54,10 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                     leading: const Icon(Icons.edit_square),
                     title: const Text('Edit'),
                     onTap: () {
-                      print('pressed edit');
+                      Navigator.of(context).pushReplacementNamed(
+                        '/canvas',
+                        arguments: widget._myImages[idx],
+                      );
                     },
                   ),
                 ],
@@ -93,6 +68,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
     );
   }
 
+  /// Popup dialogue to rename saved drawing
   Future<void> _showMyDialogue(
       BuildContext context, Drawing drawing, int index) {
     String? title = drawing.title;
@@ -108,14 +84,10 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 title = value;
               },
             ),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
             actions: [
               FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel'),
-              ),
-              FilledButton(
+                style: FilledButton.styleFrom(backgroundColor: Colors.amber),
                 onPressed: () {
                   final Drawing updatedDrawing = Drawing(
                     id: drawing.id,
@@ -128,6 +100,13 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                   Navigator.of(context).pop();
                 },
                 child: const Text('Save'),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(backgroundColor: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
               ),
             ],
           );
