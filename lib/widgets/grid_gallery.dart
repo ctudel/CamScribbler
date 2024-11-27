@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:cam_scribbler/models/models.dart';
 
 /// Grid view of drawing gallery
@@ -22,32 +23,58 @@ class GridWidget extends StatelessWidget {
       itemCount: _myImages.length,
       itemBuilder: (context, index) {
         final Drawing drawing = _myImages[index];
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    Flexible(
-                      child: Image.file(
-                        File(drawing.path),
+        return GestureDetector(
+          onLongPress: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Wrap(
+                    children: <Widget>[
+                      ListTile(
+                        leading: PhosphorIcon(PhosphorIcons.pencil()),
+                        title: const Text('Rename'),
+                        onTap: () {
+                          print('pressed rename');
+                        },
                       ),
-                    ),
-                    Text(
-                      drawing.title,
-                      style: style,
-                    ),
-                    Text(
-                      drawing.date,
-                      style: style,
-                    ),
-                  ],
+                      ListTile(
+                        leading: const Icon(Icons.edit_square),
+                        title: const Text('Edit'),
+                        onTap: () {
+                          print('pressed edit');
+                        },
+                      ),
+                    ],
+                  );
+                });
+          },
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Flexible(
+                        child: Image.file(
+                          File(drawing.path),
+                        ),
+                      ),
+                      Text(
+                        drawing.title,
+                        style: style,
+                      ),
+                      Text(
+                        drawing.date,
+                        style: style,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
