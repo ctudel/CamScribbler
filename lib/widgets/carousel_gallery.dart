@@ -54,7 +54,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                     leading: const Icon(Icons.edit_square),
                     title: const Text('Edit'),
                     onTap: () {
-                      Navigator.of(context).pushReplacementNamed(
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(
                         '/canvas',
                         arguments: widget._myImages[idx],
                       );

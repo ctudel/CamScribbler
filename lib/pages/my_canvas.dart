@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -15,11 +16,14 @@ import 'package:cam_scribbler/models/models.dart';
 class MyCanvas extends StatefulWidget {
   const MyCanvas({
     super.key,
+    this.id,
     required this.title,
     required this.imagePath,
     required this.drawables,
   });
 
+  // TODO: use id (not null) when editing photos
+  final int? id;
   final String title;
   final String imagePath;
   final String drawables;
@@ -70,7 +74,7 @@ class _MyCanvasState extends State<MyCanvas> {
       ),
       drawables: (widget.drawables != '')
           ? jsonToDrawables(widget.drawables)
-          : const [],
+          : <Drawable>[],
     );
 
     imageFuture = getUiImage(widget.imagePath);
@@ -112,7 +116,6 @@ class _MyCanvasState extends State<MyCanvas> {
                     context.read<CanvasProvider>().createTempImage(byteData);
 
                     // Navigate to save page and access the image
-                    Navigator.of(context).popUntil(ModalRoute.withName('/'));
                     Navigator.of(context).pushReplacementNamed(
                       '/save',
                       arguments: Drawing(
