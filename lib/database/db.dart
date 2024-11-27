@@ -40,6 +40,16 @@ Future<void> saveDrawing(Drawing drawing) async {
   _database.insert(
     'drawings',
     drawing.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
+}
+
+Future<void> renameDrawing(Drawing drawing, int index) async {
+  _database.update(
+    'drawings',
+    drawing.toMap(),
+    where: 'id = ?',
+    whereArgs: [index],
   );
 }
 
