@@ -82,6 +82,8 @@ class _SaveDrawingState extends State<SaveDrawing> {
                         path: await _getImagePath(_title, imageBytes),
                         drawables: widget.drawing.drawables,
                       );
+
+                      // TODO: if id is NOT NULL, call _updateDrawing
                       _uploadDrawing(drawing);
                       Navigator.of(context).pushReplacementNamed('/drawings');
                     },
@@ -104,6 +106,8 @@ class _SaveDrawingState extends State<SaveDrawing> {
     );
   }
 }
+
+// TODO: Create _updateDrawing method
 
 void _uploadDrawing(Drawing drawing) async {
   await db.saveDrawing(drawing);

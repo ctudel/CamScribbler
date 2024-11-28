@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -116,7 +114,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
 
   /// Update drawing name in database
   Future<void> _updateName(Drawing drawing, int id, int index) async {
-    await db.renameDrawing(drawing, id);
+    await db.updateDrawing(drawing, id);
     setState(() {
       widget._myImages[index] = drawing;
     });

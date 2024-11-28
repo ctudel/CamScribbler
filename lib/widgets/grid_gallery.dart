@@ -110,7 +110,7 @@ class _GridWidgetState extends State<GridWidget> {
 
   /// Update drawing name in database
   Future<void> _updateName(Drawing drawing, int id, int index) async {
-    await db.renameDrawing(drawing, id);
+    await db.updateDrawing(drawing, id);
     setState(() {
       widget._myImages[index] = drawing;
     });

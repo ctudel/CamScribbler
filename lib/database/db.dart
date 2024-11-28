@@ -44,12 +44,12 @@ Future<void> saveDrawing(Drawing drawing) async {
   );
 }
 
-Future<void> renameDrawing(Drawing drawing, int index) async {
+Future<void> updateDrawing(Drawing drawing, int id) async {
   _database.update(
     'drawings',
     drawing.toMap(),
     where: 'id = ?',
-    whereArgs: [index],
+    whereArgs: [id],
   );
 }
 
