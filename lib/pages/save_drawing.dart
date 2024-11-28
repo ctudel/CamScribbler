@@ -36,6 +36,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
+              // Title textfield
               TextField(
                 decoration: InputDecoration(hintText: widget.drawing.title),
                 textAlign: TextAlign.center,
@@ -45,16 +46,19 @@ class _SaveDrawingState extends State<SaveDrawing> {
                   }),
                 },
               ),
+              // Image of drawing
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.memory(
-                    // rebuild with rendered image
-                    imageBytes),
+                  imageBytes,
+                ),
               ),
+              // Date
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(widget.drawing.date),
               ),
+              // Action buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

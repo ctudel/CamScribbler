@@ -46,7 +46,8 @@ class _MyCanvasState extends State<MyCanvas> {
   /// Gets an Image asset that is compatible with dart Ui
   Future<ui.Image> getUiImage(String imageAssetPath) async {
     final Uint8List bytes = await File(imageAssetPath).readAsBytes();
-    final codec = await ui.instantiateImageCodec(bytes);
+    final Uint8List grayBytes = await convertImageToGrayscale(bytes);
+    final codec = await ui.instantiateImageCodec(grayBytes);
     final ui.Image image = (await codec.getNextFrame()).image;
     return image;
   }
@@ -191,17 +192,17 @@ class _MyCanvasState extends State<MyCanvas> {
                   ),
                 ],
               ),
+              // Canvas
               body: Stack(
                 children: [
-                  // Create Canvas with background image
-                  Positioned.fill(
-                    child: Center(
-                      child: AspectRatio(
-                          aspectRatio:
-                              backgroundImage!.width / backgroundImage!.height,
-                          child: FlutterPainter(
-                            controller: _controller,
-                          )),
+                  // Create filtered background image
+                  Center(
+                    child: AspectRatio(
+                      aspectRatio:
+                          backgroundImage!.width / backgroundImage!.height,
+                      child: FlutterPainter(
+                        controller: _controller,
+                      ),
                     ),
                   ),
                   // Canvas Settings

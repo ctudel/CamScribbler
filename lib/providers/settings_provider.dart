@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
-  bool _isGrid = false;
+  bool _isGrid = true;
 
   bool get isGrid => _isGrid;
 
