@@ -21,9 +21,7 @@ class _HomepageState extends State<Homepage> {
   Future<File?> pickImage(ImageSource source) async {
     try {
       final XFile? image = await ImagePicker().pickImage(source: source);
-
       if (image == null) return null; // no image picked or taken
-
       return (this.image = File(image.path));
     } catch (e) {
       print('Failed to pick image $e');
@@ -60,12 +58,12 @@ class _HomepageState extends State<Homepage> {
                       final File? imageFile =
                           await pickImage(ImageSource.camera);
 
-                      if (imageFile != null) {
+                      if (context.mounted && imageFile != null) {
                         Navigator.pushNamed(
                           context,
                           '/canvas',
                           arguments: Drawing(
-                            title: 'placeholder',
+                            title: 'Untitled',
                             date: '',
                             path: imageFile.path,
                             drawables: '',
@@ -90,12 +88,12 @@ class _HomepageState extends State<Homepage> {
                       final File? imageFile =
                           await pickImage(ImageSource.gallery);
 
-                      if (imageFile != null) {
+                      if (context.mounted && imageFile != null) {
                         Navigator.pushNamed(
                           context,
                           '/canvas',
                           arguments: Drawing(
-                            title: 'placeholder',
+                            title: 'Untitled',
                             date: '',
                             path: imageFile.path,
                             drawables: '',

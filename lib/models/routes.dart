@@ -38,7 +38,8 @@ MaterialPageRoute genRoutes(RouteSettings settings) {
 MaterialPageRoute<MyCanvas> canvasPage(args) {
   return MaterialPageRoute<MyCanvas>(builder: (context) {
     return MyCanvas(
-      title: 'Drawing Canvas',
+      id: args.id,
+      title: args.title,
       imagePath: args.path, // extract the path from Drawing object in args
       drawables: args.drawables,
     );
