@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 
-class ControlButton extends StatelessWidget {
-  const ControlButton({
+class ToolButton extends StatelessWidget {
+  const ToolButton({
     super.key,
     required this.controller,
     required this.toolType,

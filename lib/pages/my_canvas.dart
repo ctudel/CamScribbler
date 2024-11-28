@@ -230,17 +230,17 @@ class _MyCanvasState extends State<MyCanvas> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       // Move Canvas
-                      ControlButton(
+                      ToolButton(
                         controller: _controller,
                         toolType: 'hand',
                       ),
                       // Draw
-                      ControlButton(
+                      ToolButton(
                         controller: _controller,
                         toolType: 'draw',
                       ),
                       // Erase
-                      ControlButton(
+                      ToolButton(
                         controller: _controller,
                         toolType: 'eraser',
                       ),
