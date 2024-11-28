@@ -36,8 +36,8 @@ class _SaveDrawingState extends State<SaveDrawing> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(hintText: 'Untitled'),
+              TextField(
+                decoration: InputDecoration(hintText: widget.drawing.title),
                 textAlign: TextAlign.center,
                 onChanged: (String value) => {
                   setState(() {
@@ -53,7 +53,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('${widget.drawing.date}'),
+                child: Text(widget.drawing.date),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -77,15 +77,20 @@ class _SaveDrawingState extends State<SaveDrawing> {
                     ),
                     onPressed: () async {
                       final Drawing drawing = Drawing(
-                        title: (_title != '') ? _title : 'Untitled',
+                        id: widget.drawing.id,
+                        title: (_title != '') ? _title : widget.drawing.title,
                         date: widget.drawing.date,
                         path: await _getImagePath(_title, imageBytes),
                         drawables: widget.drawing.drawables,
                       );
 
-                      // TODO: if id is NOT NULL, call _updateDrawing
-                      _uploadDrawing(drawing);
-                      Navigator.of(context).pushReplacementNamed('/drawings');
+                      if (widget.drawing.id != null)
+                        db.updateDrawing(drawing, widget.drawing.id ?? -1);
+                      else
+                        _uploadDrawing(drawing);
+
+                      if (context.mounted)
+                        Navigator.pushReplacementNamed(context, '/drawings');
                     },
                     child: const Text(
                       'Done',
@@ -106,8 +111,6 @@ class _SaveDrawingState extends State<SaveDrawing> {
     );
   }
 }
-
-// TODO: Create _updateDrawing method
 
 void _uploadDrawing(Drawing drawing) async {
   await db.saveDrawing(drawing);

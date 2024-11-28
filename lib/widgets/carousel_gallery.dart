@@ -53,6 +53,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                     title: const Text('Edit'),
                     onTap: () {
                       Navigator.of(context).pop();
+                      print(widget._myImages[idx]);
                       Navigator.of(context).pushNamed(
                         '/canvas',
                         arguments: widget._myImages[idx],
@@ -86,7 +87,10 @@ class _CarouselWidgetState extends State<CarouselWidget> {
             actionsAlignment: MainAxisAlignment.spaceEvenly,
             actions: [
               FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.amber),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  foregroundColor: Colors.black,
+                ),
                 onPressed: () {
                   final Drawing updatedDrawing = Drawing(
                     id: drawing.id,
@@ -101,7 +105,9 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 child: const Text('Save'),
               ),
               FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.white),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

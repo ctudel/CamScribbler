@@ -37,19 +37,17 @@ class MyCanvas extends StatefulWidget {
 }
 
 class _MyCanvasState extends State<MyCanvas> {
-  late PainterController _controller;
   static const Color black = Color(0xFF000000);
   ui.Image? backgroundImage;
   late Future<ui.Image> imageFuture;
+  late PainterController _controller;
 
+  // TODO: Make image black and white
   /// Gets an Image asset that is compatible with dart Ui
   Future<ui.Image> getUiImage(String imageAssetPath) async {
     final Uint8List bytes = await File(imageAssetPath).readAsBytes();
-
     final codec = await ui.instantiateImageCodec(bytes);
-
     final ui.Image image = (await codec.getNextFrame()).image;
-
     return image;
   }
 
@@ -145,16 +143,18 @@ class _MyCanvasState extends State<MyCanvas> {
               if (context.mounted && shouldPop) Navigator.pop(context);
             },
             child: Scaffold(
+              // AppBar
               appBar: AppBar(
                 backgroundColor: Theme.of(context).colorScheme.surface,
-                title: Text(widget.title),
+                title: const Text('Drawing Canvas'),
                 actions: [
+                  // Save button
                   FilledButton(
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.amber,
                     ),
                     onPressed: () async {
-                      // render the drawing as an image
+                      // Render drawing as an image
                       final ui.Image renderedImage =
                           await _controller.renderImage(Size(
                               backgroundImage!.width * 1.0,
@@ -162,20 +162,25 @@ class _MyCanvasState extends State<MyCanvas> {
 
                       final Uint8List? byteData = await renderedImage.pngBytes;
 
-                      // Store image temporarily for user to save if desired w/o a rebuild
-                      context.read<CanvasProvider>().createTempImage(byteData);
+                      if (context.mounted) {
+                        // Store image temporarily for user to potentially save w/o reconversion
+                        context
+                            .read<CanvasProvider>()
+                            .createTempImage(byteData);
 
-                      // Navigate to save page and access the image
-                      Navigator.of(context).pushReplacementNamed(
-                        '/save',
-                        arguments: Drawing(
-                          title: '',
-                          date:
-                              DateFormat.yMMMd('en_US').format(DateTime.now()),
-                          path: widget.imagePath,
-                          drawables: drawablesToJson(_controller),
-                        ),
-                      );
+                        // Navigate to save page and pass arguments
+                        Navigator.of(context).pushReplacementNamed(
+                          '/save',
+                          arguments: Drawing(
+                            id: widget.id,
+                            title: widget.title,
+                            date: DateFormat.yMMMd('en_US')
+                                .format(DateTime.now()),
+                            path: widget.imagePath,
+                            drawables: drawablesToJson(_controller),
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       'Save',
@@ -253,8 +258,3 @@ class _MyCanvasState extends State<MyCanvas> {
         });
   }
 }
-
-// =======================================
-// Custom Settings Widget for Canvas Tools
-// =======================================
-

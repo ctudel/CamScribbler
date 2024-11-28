@@ -49,7 +49,12 @@ class _GridWidgetState extends State<GridWidget> {
                         leading: const Icon(Icons.edit_square),
                         title: const Text('Edit'),
                         onTap: () {
-                          print('pressed edit');
+                          print(widget._myImages[idx].title);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed(
+                            '/canvas',
+                            arguments: widget._myImages[idx],
+                          );
                         },
                       ),
                     ],
@@ -63,6 +68,7 @@ class _GridWidgetState extends State<GridWidget> {
     );
   }
 
+  // TODO: Segment this into a separate model for grid and carousel
   /// Popup dialogue to rename saved drawing
   Future<void> _showMyDialogue(
       BuildContext context, Drawing drawing, int index) {
@@ -82,7 +88,10 @@ class _GridWidgetState extends State<GridWidget> {
             actionsAlignment: MainAxisAlignment.spaceEvenly,
             actions: [
               FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.amber),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  foregroundColor: Colors.black,
+                ),
                 onPressed: () {
                   final Drawing updatedDrawing = Drawing(
                     id: drawing.id,
@@ -97,7 +106,9 @@ class _GridWidgetState extends State<GridWidget> {
                 child: const Text('Save'),
               ),
               FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.white),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
