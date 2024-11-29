@@ -40,8 +40,9 @@ MaterialPageRoute<MyCanvas> canvasPage(args) {
     return MyCanvas(
       id: args.id,
       title: args.title,
-      imagePath: args.path, // extract the path from Drawing object in args
+      imagePath: args.bgPath, // extract the path from Drawing object in args
       drawables: args.drawables,
+      rgbEnabled: args.rgbEnabled,
     );
   });
 }

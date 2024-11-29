@@ -19,6 +19,7 @@ class MyCanvas extends StatefulWidget {
     required this.title,
     required this.imagePath,
     required this.drawables,
+    this.rgbEnabled,
   });
 
   // TODO: use id when editing photos
@@ -31,6 +32,7 @@ class MyCanvas extends StatefulWidget {
   final String title;
   final String imagePath;
   final String drawables;
+  final bool? rgbEnabled;
 
   @override
   State<MyCanvas> createState() => _MyCanvasState();
@@ -42,12 +44,13 @@ class _MyCanvasState extends State<MyCanvas> {
   late Future<ui.Image> imageFuture;
   late PainterController _controller;
 
-  // TODO: Make image black and white
   /// Gets an Image asset that is compatible with dart Ui
   Future<ui.Image> getUiImage(String imageAssetPath) async {
     final Uint8List bytes = await File(imageAssetPath).readAsBytes();
     final Uint8List grayBytes = await convertImageToGrayscale(bytes);
-    final codec = await ui.instantiateImageCodec(grayBytes);
+    final codec = (widget.rgbEnabled == true)
+        ? await ui.instantiateImageCodec(bytes)
+        : await ui.instantiateImageCodec(grayBytes);
     final ui.Image image = (await codec.getNextFrame()).image;
     return image;
   }
@@ -113,9 +116,6 @@ class _MyCanvasState extends State<MyCanvas> {
         ),
         scale: ScaleSettings(enabled: true),
       ),
-      drawables: (widget.drawables != '')
-          ? jsonToDrawables(widget.drawables)
-          : <Drawable>[],
     );
 
     imageFuture = getUiImage(widget.imagePath);
@@ -134,6 +134,8 @@ class _MyCanvasState extends State<MyCanvas> {
           }
 
           if (!snapshot.hasData) throw 'No photo found';
+
+          _controller.addDrawables(jsonToDrawables(widget.drawables));
 
           return PopScope(
             canPop: false,
@@ -177,7 +179,8 @@ class _MyCanvasState extends State<MyCanvas> {
                             title: widget.title,
                             date: DateFormat.yMMMd('en_US')
                                 .format(DateTime.now()),
-                            path: widget.imagePath,
+                            bgPath: widget.imagePath,
+                            drawingPath: '',
                             drawables: drawablesToJson(_controller),
                           ),
                         );

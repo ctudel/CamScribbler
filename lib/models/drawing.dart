@@ -3,22 +3,27 @@ class Drawing {
     this.id,
     required this.title,
     required this.date,
-    required this.path,
+    required this.bgPath,
+    required this.drawingPath,
     required this.drawables,
+    this.rgbEnabled,
   });
 
   final int? id;
   final String title;
   final String date;
-  final String path;
+  final String bgPath;
+  final String drawingPath;
   final String drawables;
+  final bool? rgbEnabled;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {};
     map["id"] = id;
     map["title"] = title;
     map["date"] = date;
-    map["path"] = path;
+    map["bg_path"] = bgPath;
+    map["drawing_path"] = drawingPath;
     map["drawables"] = drawables;
     return map;
   }
@@ -28,7 +33,8 @@ class Drawing {
       id: drawing["id"],
       title: drawing["title"],
       date: drawing["date"],
-      path: drawing["path"],
+      bgPath: drawing["bg_path"],
+      drawingPath: drawing["drawing_path"],
       drawables: drawing["drawables"],
     );
   }

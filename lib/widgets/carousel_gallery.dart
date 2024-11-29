@@ -96,7 +96,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                     id: drawing.id,
                     title: title ?? drawing.title,
                     date: drawing.date,
-                    path: drawing.path,
+                    bgPath: drawing.bgPath,
+                    drawingPath: drawing.drawingPath,
                     drawables: drawing.drawables,
                   );
                   _updateName(updatedDrawing, drawing.id ?? -1, index);

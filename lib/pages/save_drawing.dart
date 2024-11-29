@@ -46,7 +46,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
                   }),
                 },
               ),
-              // Image of drawing
+              // Image of draiwng
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.memory(
@@ -84,7 +84,8 @@ class _SaveDrawingState extends State<SaveDrawing> {
                         id: widget.drawing.id,
                         title: (_title != '') ? _title : widget.drawing.title,
                         date: widget.drawing.date,
-                        path: await _getImagePath(_title, imageBytes),
+                        bgPath: widget.drawing.bgPath,
+                        drawingPath: await _getImagePath(_title, imageBytes),
                         drawables: widget.drawing.drawables,
                       );
 

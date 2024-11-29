@@ -28,7 +28,7 @@ class ImageCard extends StatelessWidget {
               children: [
                 Flexible(
                   child: Image.file(
-                    File(drawing.path),
+                    File(drawing.drawingPath),
                   ),
                 ),
                 Text(
