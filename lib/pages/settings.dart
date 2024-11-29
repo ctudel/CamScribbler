@@ -15,13 +15,14 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _autoSave = false;
-
   @override
   Widget build(BuildContext context) {
+    final SettingsProvider provider = Provider.of<SettingsProvider>(context);
     final bool isLight =
         AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-    final bool isGrid = context.watch<SettingsProvider>().isGrid;
+    final bool isGrid = provider.isGrid;
+    final bool coloredPhotos = provider.coloredPhotos ?? false;
+    print(coloredPhotos);
 
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -55,14 +56,14 @@ class _SettingsState extends State<Settings> {
             const SizedBox(height: 20),
             Row(
               children: [
-                const Text('Auto Save Drawings'),
+                const Text('Colored Photos'),
                 const SizedBox(width: 10),
                 Switch(
-                  value: _autoSave,
+                  value: coloredPhotos == true,
                   activeColor: Colors.amber,
                   onChanged: (bool value) {
                     setState(() {
-                      _autoSave = value;
+                      provider.setRgb(value);
                     });
                   },
                 )
@@ -82,7 +83,7 @@ class _SettingsState extends State<Settings> {
                   icon: PhosphorIcon(PhosphorIcons.gridFour()),
                   onPressed: () {
                     setState(() {
-                      context.read<SettingsProvider>().setGrid();
+                      provider.setGrid();
                     });
                   },
                 ),
@@ -97,7 +98,7 @@ class _SettingsState extends State<Settings> {
                   icon: PhosphorIcon(PhosphorIcons.images()),
                   onPressed: () {
                     setState(() {
-                      context.read<SettingsProvider>().setCarousel();
+                      provider.setCarousel();
                     });
                   },
                 ),

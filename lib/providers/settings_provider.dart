@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
   bool _isGrid = true;
+  bool? _coloredPhotos = false;
 
   bool get isGrid => _isGrid;
+  bool? get coloredPhotos => _coloredPhotos;
 
   void setGrid() {
     _isGrid = true;
@@ -14,8 +16,8 @@ class SettingsProvider with ChangeNotifier {
     _isGrid = false;
   }
 
-  void toggleView() {
-    _isGrid = !_isGrid;
+  void setRgb(bool? coloredPhotos) {
+    _coloredPhotos = coloredPhotos;
     notifyListeners();
   }
 }
