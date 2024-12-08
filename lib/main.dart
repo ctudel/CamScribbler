@@ -9,8 +9,8 @@ import 'models/models.dart';
 
 void main() async {
   runApp(const MyApp());
-  // await db.deleteDatabase();
   await db.init();
+  // await db.deleteDatabase();
 }
 
 class MyApp extends StatelessWidget {

@@ -23,8 +23,8 @@ class _GridWidgetState extends State<GridWidget> {
     const TextStyle style = TextStyle(color: Colors.black);
 
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
       ),
       itemCount: widget._myImages.length,
       itemBuilder: (context, idx) {
@@ -52,10 +52,20 @@ class _GridWidgetState extends State<GridWidget> {
                           print(
                               'grid rgb: ${widget._myImages[idx].rgbEnabled}');
                           Navigator.of(context).pop();
-                          Navigator.of(context).pushNamed(
+                          Navigator.of(context).pushReplacementNamed(
                             '/canvas',
                             arguments: widget._myImages[idx],
                           );
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.delete_forever),
+                        title: const Text('Delete'),
+                        onTap: () {
+                          deleteDialogue(context, widget._myImages[idx], idx);
+                          setState(() {
+                            widget._myImages.removeAt(idx);
+                          });
                         },
                       ),
                     ],
@@ -69,7 +79,34 @@ class _GridWidgetState extends State<GridWidget> {
     );
   }
 
-  // TODO: Segment this into a separate model for grid and carousel
+  /// Dialogue to confirm delete drawing
+  Future<void> deleteDialogue(BuildContext context, Drawing drawing, int index) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to proceed?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                _delete(drawing, index);
+                Navigator.of(context).popUntil(ModalRoute.withName('/drawings'));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// Popup dialogue to rename saved drawing
   Future<void> _showMyDialogue(
       BuildContext context, Drawing drawing, int index) {
@@ -129,4 +166,8 @@ class _GridWidgetState extends State<GridWidget> {
       widget._myImages[index] = drawing;
     });
   }
+}
+
+Future<void> _delete(Drawing drawing, index) async {
+  await db.deleteDrawing(drawing);
 }

@@ -14,6 +14,7 @@ class SettingsProvider with ChangeNotifier {
 
   void setCarousel() {
     _isGrid = false;
+    notifyListeners();
   }
 
   void setRgb(int? coloredPhotos) {

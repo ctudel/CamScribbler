@@ -37,7 +37,7 @@ getDrawings() async {
 
 /// Insert an image object
 Future<void> saveDrawing(Drawing drawing) async {
-  _database.insert(
+  await _database.insert(
     'drawings',
     drawing.toMap(),
     conflictAlgorithm: ConflictAlgorithm.replace,
@@ -45,7 +45,7 @@ Future<void> saveDrawing(Drawing drawing) async {
 }
 
 Future<void> updateDrawing(Drawing drawing, int id) async {
-  _database.update(
+  await _database.update(
     'drawings',
     drawing.toMap(),
     where: 'id = ?',
@@ -53,13 +53,18 @@ Future<void> updateDrawing(Drawing drawing, int id) async {
   );
 }
 
+Future<int> deleteDrawing(Drawing drawing) async {
+  return await _database.delete(
+    'drawings',
+    where: 'id = ?',
+    whereArgs: [drawing.id],
+  );
+}
+
 // FIXME: Debugging database only, delete once finished
 Future<void> deleteDatabase() async {
   await _database.close();
   final String dbPath = join(await getDatabasesPath(), 'drawings.db');
-
-// Delete the database
   await databaseFactory.deleteDatabase(dbPath);
-
   print('Database deleted');
 }

@@ -1,7 +1,6 @@
-import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
+import 'package:cam_scribbler/widgets/widgets.dart';
 import 'package:cam_scribbler/models/models.dart';
 import 'package:cam_scribbler/database/db.dart' as db;
 
@@ -60,11 +59,49 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                       );
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.delete_forever),
+                    title: const Text('Delete'),
+                    onTap: () {
+                      deleteDialogue(context, widget._myImages[idx], idx);
+                      setState(() {
+                        widget._myImages.removeAt(idx);
+                      });
+                    },
+                  ),
                 ],
               );
             });
       },
       children: list,
+    );
+  }
+
+  /// Dialogue to confirm delete drawing
+  Future<void> deleteDialogue(BuildContext context, Drawing drawing, int index) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to proceed?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                _delete(drawing, index);
+                Navigator.of(context).popUntil(ModalRoute.withName('/drawings'));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -126,4 +163,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       widget._myImages[index] = drawing;
     });
   }
+}
+Future<void> _delete(Drawing drawing, index) async {
+  await db.deleteDrawing(drawing);
 }
