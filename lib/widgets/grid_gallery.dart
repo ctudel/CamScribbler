@@ -63,9 +63,6 @@ class _GridWidgetState extends State<GridWidget> {
                         title: const Text('Delete'),
                         onTap: () {
                           deleteDialogue(context, widget._myImages[idx], idx);
-                          setState(() {
-                            widget._myImages.removeAt(idx);
-                          });
                         },
                       ),
                     ],
@@ -166,8 +163,11 @@ class _GridWidgetState extends State<GridWidget> {
       widget._myImages[index] = drawing;
     });
   }
-}
 
-Future<void> _delete(Drawing drawing, index) async {
-  await db.deleteDrawing(drawing);
+  Future<void> _delete(Drawing drawing, index) async {
+    await db.deleteDrawing(drawing);
+    setState(() {
+      widget._myImages.removeAt(index);
+    });
+  }
 }

@@ -64,9 +64,6 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                     title: const Text('Delete'),
                     onTap: () {
                       deleteDialogue(context, widget._myImages[idx], idx);
-                      setState(() {
-                        widget._myImages.removeAt(idx);
-                      });
                     },
                   ),
                 ],
@@ -163,7 +160,12 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       widget._myImages[index] = drawing;
     });
   }
+
+  Future<void> _delete(Drawing drawing, index) async {
+    await db.deleteDrawing(drawing);
+    setState(() {
+      widget._myImages.removeAt(index);
+    });
+  }
 }
-Future<void> _delete(Drawing drawing, index) async {
-  await db.deleteDrawing(drawing);
-}
+
