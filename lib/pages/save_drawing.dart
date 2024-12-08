@@ -80,6 +80,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
                       backgroundColor: Colors.amber,
                     ),
                     onPressed: () async {
+                      print('save_drawing rgb: ${widget.drawing.rgbEnabled}');
                       final Drawing drawing = Drawing(
                         id: widget.drawing.id,
                         title: (_title != '') ? _title : widget.drawing.title,
@@ -87,6 +88,7 @@ class _SaveDrawingState extends State<SaveDrawing> {
                         bgPath: widget.drawing.bgPath,
                         drawingPath: await _getImagePath(_title, imageBytes),
                         drawables: widget.drawing.drawables,
+                        rgbEnabled: widget.drawing.rgbEnabled,
                       );
 
                       if (widget.drawing.id != null)

@@ -21,8 +21,8 @@ class _SettingsState extends State<Settings> {
     final bool isLight =
         AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
     final bool isGrid = provider.isGrid;
-    final bool coloredPhotos = provider.coloredPhotos ?? false;
-    print(coloredPhotos);
+    final int coloredPhotos = provider.coloredPhotos ?? 0;
+    print(provider.coloredPhotos);
 
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -59,11 +59,15 @@ class _SettingsState extends State<Settings> {
                 const Text('Colored Photos'),
                 const SizedBox(width: 10),
                 Switch(
-                  value: coloredPhotos == true,
+                  value: coloredPhotos == 0,
                   activeColor: Colors.amber,
                   onChanged: (bool value) {
                     setState(() {
-                      provider.setRgb(value);
+                      print(value);
+                      final int tVal =
+                          (value) ? 0 : 1; // if not enabled, enable
+                      print('tVal: $tVal');
+                      provider.setRgb(tVal);
                     });
                   },
                 )

@@ -16,10 +16,10 @@ class MyCanvas extends StatefulWidget {
   const MyCanvas({
     super.key,
     this.id,
+    this.rgbEnabled,
     required this.title,
     required this.imagePath,
     required this.drawables,
-    this.rgbEnabled,
   });
 
   // TODO: use id when editing photos
@@ -29,10 +29,10 @@ class MyCanvas extends StatefulWidget {
   //
   // Otherwise, null will follow standard procedure
   final int? id;
+  final int? rgbEnabled;
   final String title;
   final String imagePath;
   final String drawables;
-  final bool? rgbEnabled;
 
   @override
   State<MyCanvas> createState() => _MyCanvasState();
@@ -48,7 +48,7 @@ class _MyCanvasState extends State<MyCanvas> {
   Future<ui.Image> getUiImage(String imageAssetPath) async {
     final Uint8List bytes = await File(imageAssetPath).readAsBytes();
     final Uint8List grayBytes = await convertImageToGrayscale(bytes);
-    final codec = (widget.rgbEnabled == true)
+    final codec = (widget.rgbEnabled == 0)
         ? await ui.instantiateImageCodec(bytes)
         : await ui.instantiateImageCodec(grayBytes);
     final ui.Image image = (await codec.getNextFrame()).image;
@@ -171,6 +171,8 @@ class _MyCanvasState extends State<MyCanvas> {
                             .read<CanvasProvider>()
                             .createTempImage(byteData);
 
+                        print('my_canvas rgb:${widget.rgbEnabled}');
+
                         // Navigate to save page and pass arguments
                         Navigator.of(context).pushReplacementNamed(
                           '/save',
@@ -182,6 +184,7 @@ class _MyCanvasState extends State<MyCanvas> {
                             bgPath: widget.imagePath,
                             drawingPath: '',
                             drawables: drawablesToJson(_controller),
+                            rgbEnabled: widget.rgbEnabled,
                           ),
                         );
                       }

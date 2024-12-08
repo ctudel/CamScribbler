@@ -13,7 +13,7 @@ Future<void> init() async {
     path,
     onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE drawings (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date DATE, bg_path TEXT, drawing_path TEXT, drawables TEXT)');
+          'CREATE TABLE drawings (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date DATE, bg_path TEXT, drawing_path TEXT, drawables TEXT, rgb_enabled INTEGER)');
       print('Table created');
     },
     version: 1,

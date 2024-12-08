@@ -49,7 +49,8 @@ class _GridWidgetState extends State<GridWidget> {
                         leading: const Icon(Icons.edit_square),
                         title: const Text('Edit'),
                         onTap: () {
-                          print(widget._myImages[idx].title);
+                          print(
+                              'grid rgb: ${widget._myImages[idx].rgbEnabled}');
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed(
                             '/canvas',
@@ -100,6 +101,7 @@ class _GridWidgetState extends State<GridWidget> {
                     bgPath: drawing.bgPath,
                     drawingPath: drawing.drawingPath,
                     drawables: drawing.drawables,
+                    rgbEnabled: drawing.rgbEnabled,
                   );
                   _updateName(updatedDrawing, drawing.id ?? -1, index);
                   Navigator.of(context).pop();
