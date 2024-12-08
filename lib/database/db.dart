@@ -61,10 +61,10 @@ Future<int> deleteDrawing(Drawing drawing) async {
   );
 }
 
-// FIXME: Debugging database only, delete once finished
-Future<void> deleteDatabase() async {
-  await _database.close();
-  final String dbPath = join(await getDatabasesPath(), 'drawings.db');
-  await databaseFactory.deleteDatabase(dbPath);
-  print('Database deleted');
-}
+// Debugging database only, uncomment if needed
+// Future<void> deleteDatabase() async {
+//   await _database.close();
+//   final String dbPath = join(await getDatabasesPath(), 'drawings.db');
+//   await databaseFactory.deleteDatabase(dbPath);
+//   print('Database deleted');
+// }

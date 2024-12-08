@@ -10,6 +10,7 @@ import 'models/models.dart';
 void main() async {
   runApp(const MyApp());
   await db.init();
+  // Debugging only, uncomment if needed
   // await db.deleteDatabase();
 }
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       dark: ThemeData.dark(useMaterial3: true),
       initial: AdaptiveThemeMode.light,
       builder: (ThemeData theme, ThemeData darkTheme) =>
-          // Creates provider at closest ancestor
+          // Create providers at closest ancestor
           MultiProvider(
         providers: [
           ChangeNotifierProvider<CanvasProvider>(
